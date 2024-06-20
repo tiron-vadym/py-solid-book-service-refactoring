@@ -1,6 +1,14 @@
 from book import Book
-from display_strategy import DisplayStrategy, ConsoleDisplayStrategy, ReverseDisplayStrategy
-from print_strategy import PrintStrategy, ConsolePrintStrategy, ReversePrintStrategy
+from display_strategy import (
+    DisplayStrategy,
+    ConsoleDisplayStrategy,
+    ReverseDisplayStrategy
+)
+from print_strategy import (
+    PrintStrategy,
+    ConsolePrintStrategy,
+    ReversePrintStrategy
+)
 from serialize_strategy import SerializeStrategy, JsonSerializer, XmlSerializer
 
 
