@@ -1,15 +1,13 @@
-from book import Book
-from display_strategy import (
-    DisplayStrategy,
+from app.book import Book
+from app.display_strategy import (
     ConsoleDisplayStrategy,
     ReverseDisplayStrategy
 )
-from print_strategy import (
-    PrintStrategy,
+from app.print_strategy import (
     ConsolePrintStrategy,
     ReversePrintStrategy
 )
-from serialize_strategy import SerializeStrategy, JsonSerializer, XmlSerializer
+from app.serialize_strategy import JsonSerializer, XmlSerializer
 
 
 def main(book: Book, commands: list[tuple[str, str]]) -> None | str:
@@ -29,24 +27,28 @@ def main(book: Book, commands: list[tuple[str, str]]) -> None | str:
     }
 
     for cmd, method_type in commands:
+        strategy = None
+        error_type = None
+
         if cmd == "display":
-            strategy: DisplayStrategy = display_strategies.get(method_type)
-            if strategy:
-                strategy.display(book.content)
-            else:
-                raise ValueError(f"Unknown display type: {method_type}")
+            strategy = display_strategies.get(method_type)
+            error_type = "display"
         elif cmd == "print":
-            strategy: PrintStrategy = print_strategies.get(method_type)
-            if strategy:
-                strategy.print_book(book.title, book.content)
-            else:
-                raise ValueError(f"Unknown print type: {method_type}")
+            strategy = print_strategies.get(method_type)
+            error_type = "print"
         elif cmd == "serialize":
-            strategy: SerializeStrategy = serialize_strategies.get(method_type)
-            if strategy:
+            strategy = serialize_strategies.get(method_type)
+            error_type = "serialize"
+
+        if strategy:
+            if cmd == "display":
+                strategy.display(book.content)
+            elif cmd == "print":
+                strategy.print_book(book.title, book.content)
+            elif cmd == "serialize":
                 return strategy.serialize(book.title, book.content)
-            else:
-                raise ValueError(f"Unknown serialize type: {method_type}")
+        else:
+            raise ValueError(f"Unknown {error_type} type: {method_type}")
 
 
 if __name__ == "__main__":
